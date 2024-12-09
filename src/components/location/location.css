@@ -17,7 +17,7 @@
     align-items: center;
 }
 
-.hdpi .pac-icon {
+.pac-container .pac-icon {
     background-image: url("/map_pin_purple.svg");
     background-repeat: no-repeat;
     background-size: 35px;
