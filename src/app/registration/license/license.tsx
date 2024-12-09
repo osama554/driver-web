@@ -30,8 +30,7 @@ const License = memo(() => {
         }
     ], [onChange]);
 
-    const handleSubmit = useCallback((fieldValues: Record<string, string>) => {
-        alert(fieldValues);
+    const handleSubmit = useCallback(() => {
         next();
     }, [next]);
 

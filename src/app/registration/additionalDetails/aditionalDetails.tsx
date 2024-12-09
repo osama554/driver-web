@@ -68,8 +68,7 @@ const AdditionalDetails = memo(() => {
         }
     ], [onChange, formData.name, formData.keysLeftAt, formData.comments, formData.photo, handleRemoveImage]);
 
-    const handleSubmit = useCallback((fieldValues: Record<string, string>) => {
-        alert(fieldValues);
+    const handleSubmit = useCallback(() => {
         next();
     }, [next]);
 

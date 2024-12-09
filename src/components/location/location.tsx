@@ -124,8 +124,7 @@ const Location = memo((props: ILocationProps) => {
         }
     ], [formData, inputRef, props.label, props.name, props.requiredErrorMessage]);
 
-    const handleSubmit = useCallback((fieldValues: Record<string, string>) => {
-        alert(fieldValues);
+    const handleSubmit = useCallback(() => {
         next();
     }, [next]);
     const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
