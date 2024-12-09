@@ -7,7 +7,7 @@ const locationStyles = {
     infoBoxInner: "flex gap-2.5 items-center",
     infoBoxText: "text-sm text-white",
     cusorPointer: "cursor-pointer",
-    addressFormWrapper: (isVisible = false) => `${isVisible ? "h-[500px]" : "h-auto"} transition-all duration-700 delay-[1000ms] bg-white lg:px-0 px-[30px] py-[30px] lg:pb-[30px] lg:pt-0 rounded-t-[40px]`,
+    addressFormWrapper: (isVisible = false) => `${isVisible ? "h-[500px]" : "h-auto"} bg-white lg:px-0 px-[30px] py-[30px] lg:pb-[30px] lg:pt-0 rounded-t-[40px]`,
     addressFormInner: "flex flex-col gap-[30px] mt-2.5",
     label: "text-[32px] leading-[48px] font-semibold",
     buttonsWrapper: "flex gap-5",

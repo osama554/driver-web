@@ -28,6 +28,7 @@ const containerStyle = {
 };
 
 const timeout = 2000;
+const inputHeight = 60;
 
 const colors = resolveConfig(tailwindConfig).theme.colors as Colors;
 
@@ -104,12 +105,16 @@ const Location = memo((props: ILocationProps) => {
             if (eventRef.current) {
                 google.maps.event.removeListener(eventRef.current);
             }
-
-            if (observerRef.current) {
-                observerRef.current.disconnect();
-            }
         };
     }, [handleAutocomplete]);
+
+    useEffect(() => {
+        if (isVisible) {
+            const inputPosition = inputRef.current?.getBoundingClientRect();
+            const pacContainer = document.querySelector(".pac-container") as HTMLElement;
+            pacContainer.style.top = `${inputPosition?.y as number + inputHeight}px`;
+        }
+    }, [inputRef, isVisible]);
 
     const fields = useMemo((): ITextFieldProps[] => [
         {
