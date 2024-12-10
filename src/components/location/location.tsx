@@ -37,6 +37,7 @@ const Location = memo((props: ILocationProps) => {
     const { prev, next } = useWizardContext();
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [infoBox, setInfoBox] = useState<boolean>(true);
+    const [isTowCompanyVisible, setIsTowCompanyVisible] = useState<boolean>(false);
     const inputRef = useMemo(() => createRef<HTMLInputElement>(), []);
     const autocompleteRef = useRef<google.maps.places.Autocomplete>();
     const eventRef = useRef<google.maps.MapsEventListener>();
@@ -58,6 +59,7 @@ const Location = memo((props: ILocationProps) => {
                 props.name as keyof typeof formData,
                 autocompleteRef.current.getPlace().formatted_address as string
             );
+            setIsTowCompanyVisible(true);
         }
     }, [props.name, updateFormValue]);
 
@@ -123,7 +125,7 @@ const Location = memo((props: ILocationProps) => {
             type: FieldTypes.TextField,
             required: true,
             ref: inputRef,
-            icon: "/pin.svg",
+            icon: "/assets/images/pin.svg",
             requiredErrorMsg: props.requiredErrorMessage,
             valueToAdded: formData[props.name as keyof IRegistrationFormData] as string,
         }
@@ -132,15 +134,35 @@ const Location = memo((props: ILocationProps) => {
     const handleSubmit = useCallback(() => {
         next();
     }, [next]);
+
+    const getAddress = useCallback(async (lat: number, lng: number) => {
+        const { Geocoder } = await loader.importLibrary("geocoding");
+        const geocoder = new Geocoder();
+        const latlng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({ location: latlng }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                if (results?.[0]) {
+                    updateFormValue(
+                        props.name as keyof typeof formData,
+                        results[0].formatted_address
+                    );
+                    setIsTowCompanyVisible(true);
+                }
+            }
+        });
+    }, [props.name, updateFormValue]);
+
     const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
         setLat(e.latLng?.lat() as number);
         setLng(e.latLng?.lng() as number);
-    }, []);
+        getAddress(e.latLng?.lat() as number, e.latLng?.lng() as number);
+    }, [getAddress]);
 
     const handlePinDrag = useCallback((e: google.maps.MapMouseEvent) => {
         setLat(e.latLng?.lat() || 0);
         setLng(e.latLng?.lng() || 0);
-    }, []);
+        getAddress(e.latLng?.lat() as number, e.latLng?.lng() as number);
+    }, [getAddress]);
 
     const center = useMemo(() => ({ lat, lng }), [lat, lng]);
 
@@ -159,6 +181,18 @@ const Location = memo((props: ILocationProps) => {
             <div className={styles.header} onClick={prev}>
                 <Image src="/assets/images/left_arrow.svg" width={7} height={13} alt="left-arrow" />
             </div>
+            {isTowCompanyVisible && <div className={styles.towCompany}>
+                <Image src="/assets/images/tow_truck.svg" width={30} height={30} alt="tow truck" />
+                <span>Tip Top Towing and Recovery</span>
+                <Image
+                    src="/assets/images/cross_white.svg"
+                    width={10}
+                    height={10}
+                    alt="cross"
+                    className={styles.cusorPointer}
+                    onClick={() => setIsTowCompanyVisible(false)}
+                />
+            </div>}
             <div className={styles.leftCol}>
                 <div className={styles.leftColInner}>
                     {
@@ -166,7 +200,9 @@ const Location = memo((props: ILocationProps) => {
                         <div className={styles.infoBoxWrapper}>
                             <div className={styles.infoBoxInner}>
                                 <Image src="/assets/images/pin_white.svg" width={13} height={15} alt="pin" />
-                                <p className={styles.infoBoxText}>Adjust your pickup pointy within the area shown.</p>
+                                <p className={styles.infoBoxText}>
+                                    Adjust your pickup point within the area shown.
+                                </p>
                             </div>
                             <Image
                                 src="/assets/images/cross_white.svg"
@@ -200,7 +236,6 @@ const Location = memo((props: ILocationProps) => {
                     mapContainerClassName={styles.mapContainer}
                     onClick={handleMapClick}
                     onLoad={onMapLoad}
-
                 >
                     <Circle radius={50} options={options} />
                     <Marker

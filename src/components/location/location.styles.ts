@@ -15,6 +15,7 @@ const locationStyles = {
     rightCol: "lg:w-3/5 w-full h-[100svh] lg:h-[calc(100vh-225px)] relative",
     mapContainer: "[&_.gmnoprint]:hidden [&_button]:hidden [&_a]:hidden",
     spinner: "absolute top-0 left-0 z-10 bg-black/50 flex items-center justify-center w-full h-full",
+    towCompany: "absolute top-[80px] w-[90%] left-[30px] h-[54px] p-3 rounded-[10px] bg-white z-10 grid gap-2.5 items-center text-sm grid-cols-[auto_1fr_auto] [&_.cursor-pointer]:invert"
 };
 
 export default locationStyles;
