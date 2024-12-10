@@ -152,12 +152,6 @@ const Location = memo((props: ILocationProps) => {
         });
     }, [props.name, updateFormValue]);
 
-    const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
-        setLat(e.latLng?.lat() as number);
-        setLng(e.latLng?.lng() as number);
-        getAddress(e.latLng?.lat() as number, e.latLng?.lng() as number);
-    }, [getAddress]);
-
     const handlePinDrag = useCallback((e: google.maps.MapMouseEvent) => {
         setLat(e.latLng?.lat() || 0);
         setLng(e.latLng?.lng() || 0);
@@ -234,7 +228,6 @@ const Location = memo((props: ILocationProps) => {
                     center={center}
                     zoom={10}
                     mapContainerClassName={styles.mapContainer}
-                    onClick={handleMapClick}
                     onLoad={onMapLoad}
                 >
                     <Circle radius={50} options={options} />
